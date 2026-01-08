@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+@import "tailwindcss";
+
+@layer utilities {
+
+    *, ::after, ::before{
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .body {
+        font-family: "Plus Jakasrta Sans", sans-serif;
+        height: 100vh;
+        background-size: cover;
+        display: flex;
+        align-items: flex-start;
+        padding: 2rem;
+    }
+
+  .font-bebas {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  
+
+  .sidebar{
+    background-color: white;
+    width: 185px;
+    border-radius: 10px 10px;
+    padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;  
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sidebar_list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem
+  }
+
+  .sidebar_element{
+    padding: 0.8rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    color: #536581;
+    fill: #8491a5;
+    cursor: pointer;
+  }
+
+  .sidebar_element:hover{
+    background-color: #007AFF;
+    color: #fff;
+    fill: #fff;
+  }
+
+  .sidebar_hide{
+    overflow: visible;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    opacity: 1;
+  }
+
+  .sidebar_text{
+    white-space: nowrap;
+    color: black;
+    font-weight: bold;
+  }
+
+    .sidebar:hover .sidebar_hide {
+        opacity: 1;
+    }
+}
+

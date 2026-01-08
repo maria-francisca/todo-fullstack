@@ -1,0 +1,157 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getTasks,
+  getTaskById,
+  createTask,
+  deleteTask,
+  toggleTask,
+} from "./api/taskApi";
+
+const App = () => {
+  const queryClient = useQueryClient();
+
+  const [title, setTitle] = useState("");
+  const [taskId, setTaskId] = useState("");
+  const [taskById, setTaskById] = useState(null);
+
+  /* 📌 LISTAR TODAS */
+  const tasksQuery = useQuery({
+    queryKey: ["tasks"],
+    queryFn: getTasks,
+  });
+
+  /* ➕ CRIAR */
+  const createMutation = useMutation({
+    mutationFn: createTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      setTitle("");
+    },
+  });
+
+  /* ❌ APAGAR */
+  const deleteMutation = useMutation({
+    mutationFn: deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  /* ✅ COMPLETAR */
+  const toggleMutation = useMutation({
+    mutationFn: toggleTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  /* 🔍 BUSCAR POR ID */
+  const handleGetById = async () => {
+    if (!taskId) return;
+    const data = await getTaskById(taskId);
+    setTaskById(data);
+  };
+
+  if (tasksQuery.isLoading) {
+    return <div className="p-6 text-white">Loading...</div>;
+  }
+
+  if (tasksQuery.isError) {
+    return <div className="p-6 text-red-500">Erro ao carregar</div>;
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-white p-6">
+      <h1 className="text-2xl font-bold mb-6">Todo App</h1>
+
+      {/* ➕ Criar tarefa */}
+      <div className="flex gap-2 mb-6">
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Título da tarefa"
+          className="bg-slate-800 border border-slate-600 px-3 py-2 rounded w-64"
+        />
+        <button
+          onClick={() => createMutation.mutate(title)}
+          className="bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+        >
+          Criar
+        </button>
+      </div>
+
+      {/* 📋 Lista */}
+      <ul className="space-y-2 mb-6">
+        {tasksQuery.data.map((task) => (
+          <li
+            key={task.id}
+            className="flex justify-between items-center bg-slate-900 p-3 rounded"
+          >
+            <span
+              className={`${
+                task.completed ? "line-through text-gray-400" : ""
+              }`}
+            >
+              {task.title}
+            </span>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() =>
+                  toggleMutation.mutate({
+                    id: task.id,
+                    completed: !task.completed,
+                  })
+                }
+                className="text-green-400 hover:text-green-600"
+              >
+                {task.completed ? "Desfazer" : "Concluir"}
+              </button>
+
+              <button
+                onClick={() => deleteMutation.mutate(task.id)}
+                className="text-red-400 hover:text-red-600"
+              >
+                Apagar
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {/* 🔍 Buscar por ID */}
+      <div className="flex gap-2 mb-4">
+        <input
+          value={taskId}
+          onChange={(e) => setTaskId(e.target.value)}
+          placeholder="ID da tarefa"
+          className="bg-slate-800 border border-slate-600 px-3 py-2 rounded w-40"
+        />
+        <button
+          onClick={handleGetById}
+          className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Buscar
+        </button>
+      </div>
+
+      {taskById && (
+        <div className="bg-slate-800 p-3 rounded">
+          <p>
+            <strong>ID:</strong> {taskById.id}
+          </p>
+          <p>
+            <strong>Título:</strong> {taskById.title}
+          </p>
+          <p>
+            <strong>Estado:</strong>{" "}
+            {taskById.completed ? "Concluída" : "Por fazer"}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
