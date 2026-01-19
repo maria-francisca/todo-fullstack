@@ -95,5 +95,27 @@
     cursor: pointer;
   }
 
+  .table_save{
+    background-color: #214afe;
+    color: #fff;
+    fill: #fff;
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .table_edit{
+    background-color: #f3b702;
+    color: #fff;
+    fill: #fff;
+    padding: 5px 12px;
+    border-radius: 8px 8px;
+    cursor: pointer;
+  }
+
+  .table{
+    border-radius: 12px;
+    overflow: hidden;
+  }
 }
 

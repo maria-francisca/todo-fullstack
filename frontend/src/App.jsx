@@ -89,7 +89,7 @@ const App = () => {
             )}
 
             {tasksQuery.data && (
-              <table className="min-w-full bg-white rounded shadow">
+              <table className="table min-w-full bg-white rounded shadow">
                 <thead>
                   <tr className="bg-gray-300">
                     <th className="text-left px-4 py-2 text-black">Título</th>
@@ -137,7 +137,7 @@ const App = () => {
                             onClick={() =>
                               toggleMutation.mutate({ id: task.id, completed: true })
                             }
-                            className="table_finish group text-black font-bold  "
+                            className="table_finish group text-black font-bold"
                           >
                             Concluir
                           </button>
@@ -148,7 +148,7 @@ const App = () => {
                         {editId === task.id ? (
                           <button
                             onClick={() => changeTitleMutation.mutate({ id: task.id, title: editTitle })}
-                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                            className=" table_save text-white font-bold"
                           >
                             Salvar
                           </button>
@@ -158,7 +158,7 @@ const App = () => {
                               setEditId(task.id);
                               setEditTitle(task.title);
                             }}
-                            className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                            className=" table_edit text-white font-bold"
                           >
                             Editar
                           </button>
