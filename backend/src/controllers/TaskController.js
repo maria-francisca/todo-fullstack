@@ -1,5 +1,6 @@
 import CreateTaskDTO from "../dto/CreateTaskDTO.js";
 import UpdateTaskDTO from "../dto/UpdateTaskDTO.js";
+import UpdateTaskTitleDTO from "../dto/UpdateTaskTitleDTO.js";
 import TaskRepository from "../repositories/TaskRepository.js";
 import TaskService from "../services/TaskService.js";
 
@@ -44,6 +45,15 @@ class TaskController {
         return res.status(204).send();
     }
 
+    async updateTitle(req, res) {
+        try {
+            const dto = new UpdateTaskTitleDTO(req.body.title);
+            const updatedTask = await service.updateTaskTitle(req.params.id, dto);
+            return res.status(200).json(updatedTask);
+        } catch (e) {
+            return res.status(400).json({ error: e.message});
+        }
+    }
 }
 
 export default new TaskController();

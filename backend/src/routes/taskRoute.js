@@ -129,4 +129,37 @@ router.patch("/:id", (req, res) => TaskController.complete(req, res));
  */
 router.delete("/:id", (req, res) => TaskController.delete(req, res));
 
+// PUT mudar título de uma tarefa
+/**
+ * @swagger
+ * /tasks/{id}/title:
+ *   put:
+ *     summary: Alterar título de uma tarefa
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *          type: string
+ *          description: ID da tarefa
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *     responses:
+ *       204:
+ *         description: Tarefa alterada com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       404:
+ *         description: Tarefa não encontrada
+ */
+router.put("/:id/title", (req, res) => TaskController.updateTitle(req, res));
+
 export default router;

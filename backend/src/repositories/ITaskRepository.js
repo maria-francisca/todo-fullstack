@@ -4,4 +4,5 @@ export default class ITaskRepository {
     createTask(task){}
     updateTask(id, completed){}
     deleteTask(id){}
+    updateTitle(id, title){}
 }

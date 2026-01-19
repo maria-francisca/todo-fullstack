@@ -21,4 +21,12 @@ export default class TaskService{
         return await this.taskRepository.updateTask(id, dto.completed);
     }
 
+    async updateTaskTitle(id, dto){
+        const task = await this.taskRepository.getTaskById(id);
+        if (!task){
+            throw new Error("Tarefa não foi encontrada.");
+        }
+        return await this.taskRepository.updateTaskTitle(id, dto.title);
+    }
+
 }

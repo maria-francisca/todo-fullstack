@@ -14,7 +14,6 @@ export default class TaskRepository {
         return new Task(tasks._id.toString(), tasks.title, tasks.completed);
     }
     
-    
     async createTask(task){
         const created = await TaskModel.create({
             title: task.title, completed: task.completed,
@@ -32,6 +31,14 @@ export default class TaskRepository {
 
     async deleteTask(id){
         await TaskModel.findByIdAndDelete(id);
+    }
+
+    async updateTaskTitle(id, newTitle){
+        const task = await TaskModel.findById(id);
+        if (!task) return null;
+        task.title = newTitle;
+        await task.save();
+        return new Task(task._id.toString(), task.title, task.completed);
     }
 
 }
