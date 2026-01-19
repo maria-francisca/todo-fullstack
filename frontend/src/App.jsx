@@ -41,7 +41,7 @@ const App = () => {
   });
 
   return (
-    <div className="min-h-screen flex bg-blue-100 text-black p-6">
+    <div className="min-h-screen flex bg-indigo-300 text-black p-6">
       
       {/* Menu */}
       <aside className="sidebar">
@@ -101,17 +101,19 @@ const App = () => {
 
 
                       <td className="px-4 py-2 flex justify-center gap-2">
-                        <button
-                          onClick={() =>
-                            toggleMutation.mutate({ id: task.id, completed: !task.completed })
-                          }
-                          className="text-green-600 hover:text-green-800"
-                        >
-                          {task.completed ? "" : "Concluir"}
-                        </button>
+                        { !task.completed && (
+                          <button
+                            onClick={() =>
+                              toggleMutation.mutate({ id: task.id, completed: true })
+                            }
+                            className="table_finish group text-black font-bold  "
+                          >
+                            Concluir
+                          </button>
+                        )}
                         <button
                           onClick={() => deleteMutation.mutate(task.id)}
-                          className="text-red-600 hover:text-red-800"
+                          className="table_delete text-black font-bold"
                         >
                           Apagar
                         </button>
