@@ -32,6 +32,7 @@ npm create vite@latest
 cd frontend
 npm install
 npm install tailwindcss @tailwindcss/vite
+npm run dev
 ````
 
 O frontend está disponível em http://localhost:5173/
