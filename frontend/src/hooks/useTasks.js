@@ -24,5 +24,10 @@ export const useTasks = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
-  return { tasksQuery, addTask, complete, remove };
+  const changeTitle = useMutation({
+    mutationFn: taskApi.changeTitle,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] })
+  });
+
+  return { tasksQuery, addTask, complete, remove, changeTitle };
 };

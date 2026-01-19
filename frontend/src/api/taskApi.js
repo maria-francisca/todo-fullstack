@@ -31,3 +31,10 @@ export const toggleTask = async ({ id, completed }) => {
   });
   return res.data;
 };
+
+export const changeTitle = async ({ id, title }) => {
+  const res = await axios.put(`${API_URL}/${id}/title`, {
+    title
+  });
+  return res.data;
+};

@@ -5,12 +5,15 @@ import {
   createTask,
   deleteTask,
   toggleTask,
+  changeTitle,
 } from "./api/taskApi";
 
 const App = () => {
   const queryClient = useQueryClient();
-  const [view, setView] = useState("");
+  const [view, setView] = useState("listar");
   const [title, setTitle] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");;
 
   /* LISTAR TODAS AS TAREFAS */
   const tasksQuery = useQuery({
@@ -40,6 +43,16 @@ const App = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
+  /* MUDAR TíTULO */
+  const changeTitleMutation = useMutation({
+    mutationFn: changeTitle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      setEditId(null);
+      setEditTitle("");
+    },
+  });
+
   return (
     <div className="min-h-screen flex bg-indigo-300 text-black p-6">
       
@@ -64,7 +77,6 @@ const App = () => {
 
         <h1 className="text-6xl flex font-bebas text-black text-center mb-10">Tarefas</h1>
 
-
         {/* Lista de tarefas */}
         {view === "listar"  && (
           <>
@@ -88,9 +100,28 @@ const App = () => {
                 <tbody>
                   {tasksQuery.data.map((task) => (
                     <tr key={task.id} className="border-b hover:bg-gray-100">
+
                       <td className={`px-4 py-2 text-black`}>
-                        {task.title}
+                        {editId === task.id ? (
+                          <input
+                            autoFocus
+                            value={editTitle}
+                            onChange={(e) => setEditTitle(e.target.value)}
+                            className="border px-2 py-1 rounded w-full"
+                          />
+                        ) : (
+                          <span
+                            onClick={() => {
+                              setEditId(task.id);
+                              setEditTitle(task.title);
+                            }}
+                            className="cursor-pointer hover:bg-yellow-100 px-1"
+                          >
+                            {task.title}
+                          </span>
+                        )}
                       </td>
+
                       <td className="px-4 py-2">
                         {task.completed ? (
                           <span className="text-green-600 font-bold">Completa</span>
@@ -111,6 +142,28 @@ const App = () => {
                             Concluir
                           </button>
                         )}
+
+                        {/* Se tiver a editar, aparece SALVAR */}
+                        {/* Caso contrário, aparece EDITAR */}
+                        {editId === task.id ? (
+                          <button
+                            onClick={() => changeTitleMutation.mutate({ id: task.id, title: editTitle })}
+                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                          >
+                            Salvar
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditId(task.id);
+                              setEditTitle(task.title);
+                            }}
+                            className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                          >
+                            Editar
+                          </button>
+                        )}
+
                         <button
                           onClick={() => deleteMutation.mutate(task.id)}
                           className="table_delete text-black font-bold"
